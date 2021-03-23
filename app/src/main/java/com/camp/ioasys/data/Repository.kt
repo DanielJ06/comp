@@ -1,4 +1,9 @@
 package com.camp.ioasys.data
 
-class Repository {
+import javax.inject.Inject
+
+class Repository @Inject constructor(
+    remoteDataSource: RemoteDataSource
+) {
+    val remote = remoteDataSource
 }
