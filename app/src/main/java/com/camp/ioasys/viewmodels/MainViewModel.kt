@@ -1,5 +1,7 @@
 package com.camp.ioasys.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.camp.ioasys.data.Repository
@@ -17,23 +19,14 @@ class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
+    val userHeaders: MutableLiveData<Response<User>> = MutableLiveData()
+
     fun signIn(email: String, password: String) = viewModelScope.launch {
         try {
+            Log.i("Data", "Bateu signIn")
             val response = repository.remote.signIn(email, password)
-            handleLogin(response)
+            userHeaders.value = response
         } catch (e: Exception) {}
-    }
-
-    private fun handleLogin(response: Response<User>): NetworkResult<Headers>? {
-        return when {
-            response.isSuccessful -> {
-                val headers = response.headers()
-                NetworkResult.Success(headers)
-            }
-            else -> {
-                NetworkResult.Error(response.message())
-            }
-        }
     }
 
 }
