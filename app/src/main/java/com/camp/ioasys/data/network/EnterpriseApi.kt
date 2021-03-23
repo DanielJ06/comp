@@ -5,6 +5,6 @@ import retrofit2.http.POST
 interface EnterpriseApi {
 
     @POST("/users/auth/sign_in")
-    suspend fun signIn() {}
+    suspend fun signIn(email: String, password: String)
 
 }
