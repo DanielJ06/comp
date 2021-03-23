@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">IoasysCamp</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, contetur adipiscing elit. Nunc accumsan.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="join">entrar</string>
+    <string name="welcome">BEM-VINDO AO \n EMPRESA</string>
+</resources>
