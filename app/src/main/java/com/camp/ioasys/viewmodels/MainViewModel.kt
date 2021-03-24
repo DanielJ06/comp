@@ -19,14 +19,28 @@ class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val userHeaders: MutableLiveData<Response<User>> = MutableLiveData()
+    val userHeaders: MutableLiveData<NetworkResult<Any>> = MutableLiveData()
 
     fun signIn(email: String, password: String) = viewModelScope.launch {
         try {
-            Log.i("Data", "Bateu signIn")
             val response = repository.remote.signIn(email, password)
-            userHeaders.value = response
+            userHeaders.value = handleLogin(response)
         } catch (e: Exception) {}
+    }
+
+    private fun handleLogin(response: Response<Any>): NetworkResult<Any> {
+        return when {
+            response.isSuccessful -> {
+                val headers = response.headers()
+                NetworkResult.Success(headers)
+            }
+            response.code() == 401 -> {
+                NetworkResult.Error("Invalid login credentials. Please try again.")
+            }
+            else -> {
+                NetworkResult.Error(response.message())
+            }
+        }
     }
 
 }

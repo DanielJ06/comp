@@ -11,10 +11,7 @@ class RemoteDataSource @Inject constructor(
     private val enterpriseApi: EnterpriseApi
 ) {
 
-    suspend fun signIn(email: String, password: String): Response<User> {
-        val res = enterpriseApi.signIn(email, password)
-        Log.i("Data", res.toString())
-        return res
+    suspend fun signIn(email: String, password: String): Response<Any> {
+        return enterpriseApi.signIn(email, password)
     }
-
 }
