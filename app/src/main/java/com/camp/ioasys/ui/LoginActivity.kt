@@ -1,16 +1,16 @@
 package com.camp.ioasys.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.camp.ioasys.R
 import com.camp.ioasys.databinding.ActivityLoginBinding
 import com.camp.ioasys.util.NetworkResult
 import com.camp.ioasys.viewmodels.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,12 +22,24 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.lifecycleOwner = this
+
+        // testeapple@ioasys.com.br
+        // 12341234
 
         binding.loginSubmitButton.setOnClickListener {
-            onSubmit("testeapple@ioasys.com.br", "1234123")
+            val email = binding.loginEmailEditText.text?.toString()
+            val password = binding.loginPasswordEditText.text?.toString()
+
+            if (email.isNullOrEmpty() && password.isNullOrEmpty()) {
+                Snackbar.make(it, "Preencha os campos", Snackbar.LENGTH_SHORT).show()
+            } else {
+                onSubmit(email!!, password!!)
+            }
         }
 
-        setContentView(binding.root)
     }
 
     private fun onSubmit(email: String, password: String) {
@@ -35,8 +47,21 @@ class LoginActivity : AppCompatActivity() {
         mainViewModel.userHeaders.observe(this, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(this, res.toString(), Toast.LENGTH_LONG).show()
-                } else -> {
+                    Log.i("Data", "Is success")
+
+                    val accessToken = res.data!!.get("access-token")
+                    val client = res.data!!.get("client")
+                    val uid = res.data!!.get("uid")
+
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.putExtra("access-token", accessToken)
+                    intent.putExtra("client", client)
+                    intent.putExtra("uid", uid)
+
+                    startActivity(intent)
+                    finish()
+                }
+                else -> {
                     binding.loginEmailInputLayout.error = " "
                     binding.loginPasswordInputLayout.error = " "
                     Toast.makeText(this, res.message.toString(), Toast.LENGTH_LONG).show()

@@ -1,121 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/beige"
-    tools:context=".ui.LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/login_logo_image"
-        android:layout_width="184dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/logo_home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/login_welcome_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/welcome"
-        android:textAlignment="center"
-        android:textColor="@color/charcoal_grey"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_logo_image" />
+        <variable
+            name="mainViewModel"
+            type="com.camp.ioasys.viewmodels.MainViewModel" />
+    </data>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/login_description_textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:text="@string/lorem_ipsum"
-        android:textAlignment="center"
-        android:textColor="@color/charcoal_grey"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_welcome_textView" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/beige"
+        tools:context=".ui.LoginActivity">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_email_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        app:hintAnimationEnabled="false"
-        app:layout_constraintEnd_toEndOf="@+id/login_description_textView"
-        app:layout_constraintStart_toStartOf="@+id/login_description_textView"
-        app:layout_constraintTop_toBottomOf="@+id/login_description_textView">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/login_logo_image"
+            android:layout_width="184dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/logo_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_email_editText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/ic_email"
-            android:drawablePadding="8dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/login_welcome_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/welcome"
+            android:textAlignment="center"
+            android:textColor="@color/charcoal_grey"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_logo_image" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/login_description_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="48dp"
+            android:text="@string/lorem_ipsum"
+            android:textAlignment="center"
+            android:textColor="@color/charcoal_grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_welcome_textView" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_password_inputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        app:hintAnimationEnabled="false"
-        app:layout_constraintEnd_toEndOf="@+id/login_email_inputLayout"
-        app:layout_constraintStart_toStartOf="@+id/login_email_inputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/login_email_inputLayout"
-        app:passwordToggleEnabled="true">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_email_inputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            app:hintAnimationEnabled="false"
+            app:layout_constraintEnd_toEndOf="@+id/login_description_textView"
+            app:layout_constraintStart_toStartOf="@+id/login_description_textView"
+            app:layout_constraintTop_toBottomOf="@+id/login_description_textView">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_password_editText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/ic_lock"
-            android:drawablePadding="8dp"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_email_editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="8dp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/charcoal_grey"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/medium_pink"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@id/login_password_inputLayout"
-        app:layout_constraintStart_toStartOf="@id/login_password_inputLayout"
-        app:layout_constraintTop_toBottomOf="@id/login_password_inputLayout"
-        tools:text="Credenciais inválidas" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_password_inputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            app:layout_constraintEnd_toEndOf="@+id/login_email_inputLayout"
+            app:layout_constraintStart_toStartOf="@+id/login_email_inputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/login_email_inputLayout"
+            app:passwordToggleEnabled="true">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/login_submit_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_button"
-        android:gravity="center"
-        android:text="@string/join"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@id/login_password_inputLayout"
-        app:layout_constraintStart_toStartOf="@id/login_password_inputLayout"
-        app:layout_constraintTop_toBottomOf="@id/login_password_inputLayout" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/charcoal_grey"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            readApiResponse="@{mainViewModel.userHeaders}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/medium_pink"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/login_password_inputLayout"
+            app:layout_constraintStart_toStartOf="@id/login_password_inputLayout"
+            app:layout_constraintTop_toBottomOf="@id/login_password_inputLayout"
+            tools:text="Credenciais inválidas" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_submit_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
+            android:text="@string/join"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@id/login_password_inputLayout"
+            app:layout_constraintStart_toStartOf="@id/login_password_inputLayout"
+            app:layout_constraintTop_toBottomOf="@id/login_password_inputLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val userHeaders: MutableLiveData<NetworkResult<Any>> = MutableLiveData()
+    val userHeaders: MutableLiveData<NetworkResult<Headers>> = MutableLiveData()
 
     fun signIn(email: String, password: String) = viewModelScope.launch {
         try {
@@ -28,7 +28,8 @@ class MainViewModel @Inject constructor(
         } catch (e: Exception) {}
     }
 
-    private fun handleLogin(response: Response<Any>): NetworkResult<Any> {
+    private fun handleLogin(response: Response<Any>): NetworkResult<Headers> {
+        userHeaders.value = NetworkResult.Loading()
         return when {
             response.isSuccessful -> {
                 val headers = response.headers()
