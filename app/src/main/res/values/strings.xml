@@ -6,4 +6,6 @@
     <string name="join">entrar</string>
     <string name="welcome">BEM-VINDO AO \n EMPRESA</string>
     <string name="companies">Empresas</string>
+    <string name="brazil">Brasil</string>
+    <string name="enterprise_type">Negócio</string>
 </resources>
