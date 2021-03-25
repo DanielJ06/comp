@@ -40,15 +40,9 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun onSubmit(email: String, password: String) {
-        mainViewModel.signIn(email, password)
         mainViewModel.userHeaders.observe(this, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
-                    Log.i("Data", "Is success")
-
                     val accessToken = res.data!!.get("access-token")
                     val client = res.data!!.get("client")
                     val uid = res.data!!.get("uid")
@@ -61,12 +55,18 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
+                is NetworkResult.Loading -> {}
                 else -> {
                     binding.loginEmailInputLayout.error = " "
                     binding.loginPasswordInputLayout.error = " "
-                    Toast.makeText(this, res.message.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, res.message, Toast.LENGTH_LONG).show()
                 }
             }
         })
+
+    }
+
+    private fun onSubmit(email: String, password: String) {
+        mainViewModel.signIn(email, password)
     }
 }

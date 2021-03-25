@@ -2,6 +2,7 @@ package com.camp.ioasys.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.camp.ioasys.R
 import com.camp.ioasys.databinding.ActivityMainBinding
 
@@ -18,10 +19,6 @@ class MainActivity : AppCompatActivity() {
         val client = intent.getStringExtra("client")
         val uid = intent.getStringExtra("uid")
 
-        if (!accessToken.isNullOrEmpty() && !client.isNullOrEmpty() && !uid.isNullOrEmpty()) {
-            binding.accessToken.text = accessToken
-            binding.client.text = client
-            binding.uid.text = uid
-        }
+        Log.i("DataMainActivity", "$accessToken - $client - $uid")
     }
 }

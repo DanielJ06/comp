@@ -17,17 +17,17 @@ class LoginBingingAdapter {
             textView: TextView,
             apiResponse: NetworkResult<Headers>?
         ) {
-            when (apiResponse) {
-                is NetworkResult.Error -> {
-                    textView.visibility = View.VISIBLE
-                    textView.text = apiResponse.message.toString()
-                }
-                is NetworkResult.Success -> {
-                    textView.visibility = View.INVISIBLE
-                }
-                else -> {
-                    Log.i("Data", apiResponse.toString())
-                }
+            if (apiResponse is NetworkResult.Error) {
+                textView.visibility = View.VISIBLE
+                textView.text = apiResponse.message.toString()
+                Log.i("DataError", apiResponse.toString())
+            } else if (apiResponse is NetworkResult.Success) {
+                textView.visibility = View.INVISIBLE
+                Log.i("DataSuccess", apiResponse.toString())
+            } else if (apiResponse is NetworkResult.Loading) {
+                Log.i("DataElse", apiResponse.toString())
+            } else {
+                Log.i("Data", apiResponse.toString())
             }
         }
 

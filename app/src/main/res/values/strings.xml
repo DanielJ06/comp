@@ -5,4 +5,5 @@
     <string name="password">Senha</string>
     <string name="join">entrar</string>
     <string name="welcome">BEM-VINDO AO \n EMPRESA</string>
+    <string name="companies">Empresas</string>
 </resources>
