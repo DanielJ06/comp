@@ -8,4 +8,6 @@
     <string name="companies">Empresas</string>
     <string name="brazil">Brasil</string>
     <string name="enterprise_type">Negócio</string>
+    <string name="search">Search</string>
+    <string name="search_company">Buscar empresa</string>
 </resources>

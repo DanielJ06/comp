@@ -3,9 +3,14 @@ package com.camp.ioasys.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.camp.ioasys.R
 import com.camp.ioasys.adapters.CompaniesAdapter
 import com.camp.ioasys.databinding.ActivityMainBinding
 import com.camp.ioasys.util.NetworkResult
