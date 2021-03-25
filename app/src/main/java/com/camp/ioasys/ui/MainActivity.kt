@@ -40,9 +40,15 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.companies.observe(this, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
+                    hideShimmerEffect()
                     res.data?.let { mAdapter.setData(it) }
-                } else -> {
+                }
+                is NetworkResult.Loading -> {
+                    showShimmer()
+                }
+                else -> {
                     Log.i("Data", res.message.toString())
+                    hideShimmerEffect()
                 }
             }
         })
@@ -54,9 +60,19 @@ class MainActivity : AppCompatActivity() {
         binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
         )
+        showShimmer()
     }
 
     private fun requestCompanies(accessToken: String, client: String, uid: String) {
         mainViewModel.loadCompanies(accessToken, client, uid)
     }
+
+    private fun showShimmer() {
+        binding.homeCompaniesRecycler.showShimmer()
+    }
+
+    private fun hideShimmerEffect() {
+        binding.homeCompaniesRecycler.hideShimmer()
+    }
+
 }

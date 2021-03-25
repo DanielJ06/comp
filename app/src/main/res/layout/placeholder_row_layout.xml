@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/shimmer_image"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/warm_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/shimmer_title"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@color/warm_grey"
+        app:layout_constraintBottom_toTopOf="@id/shimmer_company_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/shimmer_image"
+        app:layout_constraintTop_toTopOf="@id/shimmer_image" />
+
+    <View
+        android:id="@+id/shimmer_company_type"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/warm_grey"
+        app:layout_constraintBottom_toTopOf="@id/shimmer_company_country"
+        app:layout_constraintEnd_toEndOf="@id/shimmer_title"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/shimmer_title"
+        app:layout_constraintTop_toBottomOf="@id/shimmer_title" />
+
+    <View
+        android:id="@+id/shimmer_company_country"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/warm_grey"
+        app:layout_constraintBottom_toBottomOf="@id/shimmer_image"
+        app:layout_constraintEnd_toEndOf="@id/shimmer_company_type"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/shimmer_company_type"
+        app:layout_constraintTop_toBottomOf="@id/shimmer_company_type" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

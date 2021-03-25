@@ -33,17 +33,18 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.todkars.shimmer.ShimmerRecyclerView
         android:id="@+id/home_companies_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingTop="12dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/home_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:itemCount="5"
-        tools:listitem="@layout/company_row_layout" />
+        app:shimmer_recycler_layout="@layout/placeholder_row_layout"
+        app:shimmer_recycler_item_count="15" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,6 +52,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleCompanies(response: Response<CompaniesResponse>): NetworkResult<CompaniesResponse>? {
+        companies.value = NetworkResult.Loading()
         return when {
             response.isSuccessful -> {
                 val data = response.body()
