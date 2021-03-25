@@ -1,11 +1,10 @@
 package com.camp.ioasys.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.camp.ioasys.data.Repository
-import com.camp.ioasys.models.User
+import com.camp.ioasys.models.CompaniesResponse
 import com.camp.ioasys.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,6 +19,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val userHeaders: MutableLiveData<NetworkResult<Headers>> = MutableLiveData()
+    val companies: MutableLiveData<NetworkResult<CompaniesResponse>> = MutableLiveData()
 
     fun signIn(email: String, password: String) = viewModelScope.launch {
         try {
@@ -39,6 +39,27 @@ class MainViewModel @Inject constructor(
                 NetworkResult.Error("Invalid login credentials. Please try again.")
             }
             else -> {
+                NetworkResult.Error(response.message())
+            }
+        }
+    }
+
+    fun loadCompanies(accessToken: String, client: String, uid: String) = viewModelScope.launch {
+        try {
+            val response = repository.remote.getCompanies(accessToken, client, uid)
+            companies.value = handleCompanies(response)
+        } catch (e: Exception) {}
+    }
+
+    private fun handleCompanies(response: Response<CompaniesResponse>): NetworkResult<CompaniesResponse>? {
+        return when {
+            response.isSuccessful -> {
+                val data = response.body()
+                NetworkResult.Success(data!!)
+            }
+            response.code() == 401 -> {
+                NetworkResult.Error("You need to sign in or sign up before continuing.")
+            } else -> {
                 NetworkResult.Error(response.message())
             }
         }

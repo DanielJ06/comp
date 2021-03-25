@@ -45,6 +45,7 @@ class CompaniesAdapter: RecyclerView.Adapter<CompaniesAdapter.CompaniesViewHolde
 
     fun setData(data: CompaniesResponse) {
         companies = data.companies
+        notifyDataSetChanged()
     }
 
 }

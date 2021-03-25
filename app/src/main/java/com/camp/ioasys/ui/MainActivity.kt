@@ -3,14 +3,21 @@ package com.camp.ioasys.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.camp.ioasys.R
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.camp.ioasys.adapters.CompaniesAdapter
 import com.camp.ioasys.databinding.ActivityMainBinding
+import com.camp.ioasys.util.NetworkResult
+import com.camp.ioasys.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mAdapter by lazy { CompaniesAdapter() }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +28,30 @@ class MainActivity : AppCompatActivity() {
         val client = intent.getStringExtra("client")
         val uid = intent.getStringExtra("uid")
 
-        Log.i("DataMainActivity", "$accessToken - $client - $uid")
+        setupRecycler()
+
+        requestCompanies(accessToken!!, client!!, uid!!)
+
+        mainViewModel.companies.observe(this, Observer { res ->
+            when (res) {
+                is NetworkResult.Success -> {
+                    res.data?.let { mAdapter.setData(it) }
+                } else -> {
+                    Log.i("Data", res.message.toString())
+                }
+            }
+        })
+
+    }
+
+    private fun setupRecycler() {
+        binding.homeCompaniesRecycler.adapter = mAdapter
+        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.VERTICAL, false
+        )
+    }
+
+    private fun requestCompanies(accessToken: String, client: String, uid: String) {
+        mainViewModel.loadCompanies(accessToken, client, uid)
     }
 }
