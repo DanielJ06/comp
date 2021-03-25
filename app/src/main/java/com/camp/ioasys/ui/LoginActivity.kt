@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.camp.ioasys.R
 import com.camp.ioasys.databinding.ActivityLoginBinding
 import com.camp.ioasys.util.NetworkResult
 import com.camp.ioasys.viewmodels.MainViewModel
@@ -42,9 +43,12 @@ class LoginActivity : AppCompatActivity() {
         mainViewModel.userHeaders.observe(this, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
+                    binding.loadingProgressBar.visibility = View.INVISIBLE
+                    binding.whiteLoadingEffect.visibility = View.INVISIBLE
+
                     val accessToken = res.data!!.get("access-token")
-                    val client = res.data!!.get("client")
-                    val uid = res.data!!.get("uid")
+                    val client = res.data.get("client")
+                    val uid = res.data.get("uid")
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra("access-token", accessToken)
@@ -54,12 +58,19 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
-                is NetworkResult.Loading -> {}
-                else -> {
+                is NetworkResult.Loading -> {
+                    binding.loadingProgressBar.visibility = View.VISIBLE
+                    binding.whiteLoadingEffect.visibility = View.VISIBLE
+                }
+                is NetworkResult.Error -> {
                     binding.loginEmailInputLayout.error = " "
                     binding.loginPasswordInputLayout.error = " "
+
                     binding.loginErrorText.visibility = View.VISIBLE
                     binding.loginErrorText.text = res.message
+
+                    binding.loadingProgressBar.visibility = View.INVISIBLE
+                    binding.whiteLoadingEffect.visibility = View.INVISIBLE
                 }
             }
         })

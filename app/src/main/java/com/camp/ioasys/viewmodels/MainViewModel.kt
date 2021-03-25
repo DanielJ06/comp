@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
         } catch (e: Exception) {}
     }
 
-    private fun handleCompanies(response: Response<CompaniesResponse>): NetworkResult<CompaniesResponse>? {
+    private fun handleCompanies(response: Response<CompaniesResponse>): NetworkResult<CompaniesResponse> {
         companies.value = NetworkResult.Loading()
         return when {
             response.isSuccessful -> {
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
                 NetworkResult.Success(data!!)
             }
             response.code() == 401 -> {
-                NetworkResult.Error("You need to sign in or sign up before continuing.")
+                NetworkResult.Error("You need to sign in before continuing.")
             } else -> {
                 NetworkResult.Error(response.message())
             }
