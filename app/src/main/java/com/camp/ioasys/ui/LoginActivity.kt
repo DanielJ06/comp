@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -23,8 +24,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.lifecycleOwner = this
 
         // testeapple@ioasys.com.br
         // 12341234
@@ -59,7 +58,8 @@ class LoginActivity : AppCompatActivity() {
                 else -> {
                     binding.loginEmailInputLayout.error = " "
                     binding.loginPasswordInputLayout.error = " "
-                    Toast.makeText(this, res.message, Toast.LENGTH_LONG).show()
+                    binding.loginErrorText.visibility = View.VISIBLE
+                    binding.loginErrorText.text = res.message
                 }
             }
         })
