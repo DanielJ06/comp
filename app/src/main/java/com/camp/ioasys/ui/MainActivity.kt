@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import com.camp.ioasys.R
 import com.camp.ioasys.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
