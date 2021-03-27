@@ -2,77 +2,24 @@ package com.camp.ioasys.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.camp.ioasys.R
-import com.camp.ioasys.adapters.CompaniesAdapter
-import com.camp.ioasys.databinding.ActivityMainBinding
-import com.camp.ioasys.util.NetworkResult
-import com.camp.ioasys.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private val mAdapter by lazy { CompaniesAdapter() }
-    private val mainViewModel: MainViewModel by viewModels()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        val accessToken = intent.getStringExtra("access-token")
-        val client = intent.getStringExtra("client")
-        val uid = intent.getStringExtra("uid")
-
-        setupRecycler()
-
-        requestCompanies(accessToken!!, client!!, uid!!)
-
-        mainViewModel.companies.observe(this, Observer { res ->
-            when (res) {
-                is NetworkResult.Success -> {
-                    hideShimmerEffect()
-                    res.data?.let { mAdapter.setData(it) }
-                }
-                is NetworkResult.Loading -> {
-                    showShimmer()
-                }
-                else -> {
-                    Log.i("Data", res.message.toString())
-                    hideShimmerEffect()
-                }
-            }
-        })
-
+        navController = findNavController(R.id.navHostFragment)
     }
 
-    private fun setupRecycler() {
-        binding.homeCompaniesRecycler.adapter = mAdapter
-        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.VERTICAL, false
-        )
-        showShimmer()
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    private fun requestCompanies(accessToken: String, client: String, uid: String) {
-        mainViewModel.loadCompanies(accessToken, client, uid)
-    }
-
-    private fun showShimmer() {
-        binding.homeCompaniesRecycler.showShimmer()
-    }
-
-    private fun hideShimmerEffect() {
-        binding.homeCompaniesRecycler.hideShimmer()
-    }
-
 }

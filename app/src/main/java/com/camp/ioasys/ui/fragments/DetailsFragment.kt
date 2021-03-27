@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.camp.ioasys.R
 import com.camp.ioasys.databinding.FragmentDetailsBinding
 import com.camp.ioasys.viewmodels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null

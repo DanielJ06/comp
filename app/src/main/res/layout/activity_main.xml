@@ -8,7 +8,7 @@
     tools:context=".ui.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/home_toolbar"
+        android:id="@+id/custom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/medium_pink"
@@ -33,18 +33,16 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <com.todkars.shimmer.ShimmerRecyclerView
-        android:id="@+id/home_companies_recycler"
+    <fragment
+        android:id="@+id/navHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingTop="12dp"
-        android:orientation="vertical"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:shimmer_recycler_layout="@layout/placeholder_row_layout"
-        app:shimmer_recycler_item_count="15" />
+        app:layout_constraintTop_toBottomOf="@id/custom_toolbar"
+        app:navGraph="@navigation/my_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,33 +1,39 @@
 package com.camp.ioasys.ui
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.camp.ioasys.R
-import com.camp.ioasys.databinding.ActivityLoginBinding
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.camp.ioasys.databinding.FragmentLoginBinding
 import com.camp.ioasys.util.NetworkResult
 import com.camp.ioasys.viewmodels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
-    private lateinit var binding: ActivityLoginBinding
-    private val mainViewModel: MainViewModel by viewModels()
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+    }
 
-        // testeapple@ioasys.com.br
-        // 12341234
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.loginSubmitButton.setOnClickListener {
             val email = binding.loginEmailEditText.text?.toString()
@@ -39,24 +45,28 @@ class LoginActivity : AppCompatActivity() {
                 onSubmit(email!!, password!!)
             }
         }
+        return binding.root
+    }
 
-        mainViewModel.userHeaders.observe(this, Observer { res ->
+    private fun onSubmit(email: String, password: String) {
+        mainViewModel.signIn(email, password)
+        mainViewModel.userHeaders.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
+                    Log.i("Debug", "successLogin")
                     binding.loadingProgressBar.visibility = View.INVISIBLE
                     binding.whiteLoadingEffect.visibility = View.INVISIBLE
-
                     val accessToken = res.data!!.get("access-token")
                     val client = res.data.get("client")
                     val uid = res.data.get("uid")
 
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("access-token", accessToken)
-                    intent.putExtra("client", client)
-                    intent.putExtra("uid", uid)
-
-                    startActivity(intent)
-                    finish()
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                            accessToken,
+                            client,
+                            uid
+                        )
+                    )
                 }
                 is NetworkResult.Loading -> {
                     binding.loadingProgressBar.visibility = View.VISIBLE
@@ -74,10 +84,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
-
     }
 
-    private fun onSubmit(email: String, password: String) {
-        mainViewModel.signIn(email, password)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
+
 }
