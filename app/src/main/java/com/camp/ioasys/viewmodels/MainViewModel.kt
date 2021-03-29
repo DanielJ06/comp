@@ -1,5 +1,6 @@
 package com.camp.ioasys.viewmodels
 
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.camp.ioasys.data.Repository
 import com.camp.ioasys.models.CompaniesResponse
 import com.camp.ioasys.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.Headers
 import retrofit2.Response

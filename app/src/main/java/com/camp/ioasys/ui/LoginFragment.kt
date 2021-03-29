@@ -14,6 +14,7 @@ import com.camp.ioasys.util.NetworkResult
 import com.camp.ioasys.viewmodels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -45,15 +46,10 @@ class LoginFragment : Fragment() {
                 onSubmit(email!!, password!!)
             }
         }
-        return binding.root
-    }
 
-    private fun onSubmit(email: String, password: String) {
-        mainViewModel.signIn(email, password)
         mainViewModel.userHeaders.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
-                    Log.i("Debug", "successLogin")
                     binding.loadingProgressBar.visibility = View.INVISIBLE
                     binding.whiteLoadingEffect.visibility = View.INVISIBLE
                     val accessToken = res.data!!.get("access-token")
@@ -67,6 +63,7 @@ class LoginFragment : Fragment() {
                             uid
                         )
                     )
+                    mainViewModel.userHeaders.postValue(null)
                 }
                 is NetworkResult.Loading -> {
                     binding.loadingProgressBar.visibility = View.VISIBLE
@@ -84,6 +81,12 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+
+        return binding.root
+    }
+
+    private fun onSubmit(email: String, password: String) {
+        mainViewModel.signIn(email, password)
     }
 
     override fun onDestroyView() {

@@ -25,36 +25,22 @@ class HomeFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
     private val mAdapter by lazy { CompaniesAdapter() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecycler()
+
         requestCompanies(args.accessToken!!, args.client!!, args.uid!!)
 
-        return binding.root
-    }
-
-    private fun setupRecycler() {
-        binding.homeCompaniesRecycler.adapter = mAdapter
-        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        showShimmer()
-    }
-
-    private fun requestCompanies(accessToken: String, client: String, uid: String) {
-        mainViewModel.loadCompanies(accessToken, client, uid)
+        mainViewModel.companies.removeObservers(viewLifecycleOwner)
         mainViewModel.companies.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
-                    Log.i("Debug", "successHome")
                     hideShimmerEffect()
                     res.data?.let { mAdapter.setData(it) }
                 }
@@ -68,6 +54,17 @@ class HomeFragment : Fragment() {
             }
         })
 
+        return binding.root
+    }
+
+    private fun setupRecycler() {
+        binding.homeCompaniesRecycler.adapter = mAdapter
+        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        showShimmer()
+    }
+
+    private fun requestCompanies(accessToken: String, client: String, uid: String) {
+        mainViewModel.loadCompanies(accessToken, client, uid)
     }
 
     private fun showShimmer() {
