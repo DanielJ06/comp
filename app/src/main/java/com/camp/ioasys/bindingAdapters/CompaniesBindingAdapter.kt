@@ -4,8 +4,11 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
+import androidx.navigation.findNavController
 import coil.load
 import com.camp.ioasys.R
+import com.camp.ioasys.models.Company
+import com.camp.ioasys.ui.HomeFragmentDirections
 
 class CompaniesBindingAdapter {
 
@@ -14,10 +17,16 @@ class CompaniesBindingAdapter {
         @BindingAdapter("onCompanyClickListener")
         @JvmStatic
         fun onCompanyClickListener(
-            rowLayout: ConstraintLayout, companyId: Int
+            rowLayout: ConstraintLayout, company: Company
         ) {
             rowLayout.setOnClickListener {
-                Log.i("CompanyId", companyId.toString())
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                    company.enterpriseName,
+                    company.description,
+                    company.city,
+                    company.photo
+                )
+                rowLayout.findNavController().navigate(action)
             }
         }
 
@@ -27,7 +36,7 @@ class CompaniesBindingAdapter {
             image: ImageView, imageUrl: String
         ) {
             image.load("https://thispersondoesnotexist.com/image") {
-                crossfade(600)
+                crossfade(200)
                 error(R.color.darker_pink)
             }
         }
