@@ -1,4 +1,4 @@
-package com.camp.ioasys.ui
+package com.camp.ioasys.ui.fragments
 
 import android.os.Bundle
 import android.util.Log

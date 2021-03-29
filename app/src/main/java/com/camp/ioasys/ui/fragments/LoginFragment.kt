@@ -1,7 +1,6 @@
-package com.camp.ioasys.ui
+package com.camp.ioasys.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.camp.ioasys.util.NetworkResult
 import com.camp.ioasys.viewmodels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {

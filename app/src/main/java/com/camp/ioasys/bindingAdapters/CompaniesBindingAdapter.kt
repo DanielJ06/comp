@@ -8,7 +8,8 @@ import androidx.navigation.findNavController
 import coil.load
 import com.camp.ioasys.R
 import com.camp.ioasys.models.Company
-import com.camp.ioasys.ui.HomeFragmentDirections
+import com.camp.ioasys.ui.fragments.HomeFragmentDirections
+
 
 class CompaniesBindingAdapter {
 
