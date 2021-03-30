@@ -2,10 +2,12 @@ package com.camp.ioasys.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.camp.ioasys.databinding.CompanyRowLayoutBinding
 import com.camp.ioasys.models.CompaniesResponse
 import com.camp.ioasys.models.Company
+import com.camp.ioasys.util.MyDiffUtil
 
 class CompaniesAdapter: RecyclerView.Adapter<CompaniesAdapter.CompaniesViewHolder>() {
 
@@ -43,9 +45,11 @@ class CompaniesAdapter: RecyclerView.Adapter<CompaniesAdapter.CompaniesViewHolde
         return companies.size
     }
 
-    fun setData(data: CompaniesResponse) {
-        companies = data.companies
-        notifyDataSetChanged()
+    fun setData(newList: CompaniesResponse) {
+        val diffUtil = MyDiffUtil(companies, newList)
+        val diffResult = DiffUtil.calculateDiff(diffUtil)
+        companies = newList.companies
+        diffResult.dispatchUpdatesTo(this)
     }
 
 }
