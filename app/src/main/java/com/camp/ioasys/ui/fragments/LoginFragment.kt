@@ -1,9 +1,11 @@
 package com.camp.ioasys.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -53,6 +55,11 @@ class LoginFragment : Fragment() {
                     val accessToken = res.data!!.get("access-token")
                     val client = res.data.get("client")
                     val uid = res.data.get("uid")
+
+                    val imm: InputMethodManager =
+                        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToHomeFragment(
