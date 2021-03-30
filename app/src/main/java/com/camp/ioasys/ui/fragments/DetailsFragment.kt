@@ -35,6 +35,8 @@ class DetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
+        setupToolbar()
+
         binding.detailCompanyTitle.text = args.companyName
         binding.detailCompanyDesc.text = args.companyDesc
         binding.detailCompanyCity.text = args.companyCity
@@ -44,6 +46,14 @@ class DetailsFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).run {
+            setSupportActionBar(binding.detailsToolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setTitle(args.companyName)
+        }
     }
 
     override fun onDestroy() {

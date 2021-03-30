@@ -37,7 +37,6 @@ class HomeFragment : Fragment() {
 
         requestCompanies(args.accessToken!!, args.client!!, args.uid!!)
 
-        mainViewModel.companies.removeObservers(viewLifecycleOwner)
         mainViewModel.companies.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
