@@ -45,6 +45,14 @@ class HomeFragment : Fragment() {
             when (res) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
+                    Log.i("Empty", res.data.toString())
+                    if (res.data?.companies?.isEmpty() == true) {
+                        binding.emptyIcon.visibility = View.VISIBLE
+                        binding.emptyText.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyIcon.visibility = View.INVISIBLE
+                        binding.emptyText.visibility = View.INVISIBLE
+                    }
                     res.data?.let { mAdapter.setData(it) }
                 }
                 is NetworkResult.Loading -> {
