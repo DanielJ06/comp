@@ -46,9 +46,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun loadCompanies(accessToken: String, client: String, uid: String) = viewModelScope.launch {
+    fun loadCompanies(accessToken: String, client: String, uid: String, query: String?) = viewModelScope.launch {
         try {
-            val response = repository.remote.getCompanies(accessToken, client, uid)
+            val response = repository.remote.getCompanies(accessToken, client, uid, query)
             companies.value = handleCompanies(response)
         } catch (e: Exception) {}
     }

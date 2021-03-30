@@ -19,8 +19,9 @@ class RemoteDataSource @Inject constructor(
     suspend fun getCompanies(
         accessToken: String,
         client: String,
-        uid: String
+        uid: String,
+        query: String?
     ): Response<CompaniesResponse> {
-        return enterpriseApi.getCompanies(accessToken, client, uid)
+        return enterpriseApi.getCompanies(accessToken, client, uid, query)
     }
 }

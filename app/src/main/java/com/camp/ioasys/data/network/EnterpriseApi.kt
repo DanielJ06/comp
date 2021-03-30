@@ -17,7 +17,8 @@ interface EnterpriseApi {
     suspend fun getCompanies(
         @Header("access-token") accessToken: String,
         @Header("client") client: String,
-        @Header("uid") uid: String
+        @Header("uid") uid: String,
+        @Query("name") query: String?
     ): Response<CompaniesResponse>
 
 }
