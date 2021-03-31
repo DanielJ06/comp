@@ -37,6 +37,8 @@ class LoginFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.loginSubmitButton.setOnClickListener {
+            binding.loadingProgressBar.visibility = View.VISIBLE
+            binding.whiteLoadingEffect.visibility = View.VISIBLE
             val email = binding.loginEmailEditText.text?.toString()
             val password = binding.loginPasswordEditText.text?.toString()
 
@@ -71,18 +73,16 @@ class LoginFragment : Fragment() {
                     mainViewModel.userHeaders.postValue(null)
                 }
                 is NetworkResult.Loading -> {
-                    binding.loadingProgressBar.visibility = View.VISIBLE
-                    binding.whiteLoadingEffect.visibility = View.VISIBLE
                 }
                 is NetworkResult.Error -> {
+                    binding.loadingProgressBar.visibility = View.INVISIBLE
+                    binding.whiteLoadingEffect.visibility = View.INVISIBLE
+
                     binding.loginEmailInputLayout.error = " "
                     binding.loginPasswordInputLayout.error = " "
 
                     binding.loginErrorText.visibility = View.VISIBLE
                     binding.loginErrorText.text = res.message
-
-                    binding.loadingProgressBar.visibility = View.INVISIBLE
-                    binding.whiteLoadingEffect.visibility = View.INVISIBLE
                 }
             }
         })
