@@ -2,6 +2,7 @@ package com.camp.ioasys.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.camp.ioasys.databinding.FragmentLoginBinding
 import com.camp.ioasys.util.NetworkResult
-import com.camp.ioasys.viewmodels.MainViewModel
+import com.camp.ioasys.viewmodels.AuthViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,11 +23,11 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -49,9 +50,10 @@ class LoginFragment : Fragment() {
             }
         }
 
-        mainViewModel.userHeaders.observe(viewLifecycleOwner, Observer { res ->
+        authViewModel.userHeaders.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
+                    Log.i("FragmentsDebug", "loginSuccess")
                     binding.loadingProgressBar.visibility = View.INVISIBLE
                     binding.whiteLoadingEffect.visibility = View.INVISIBLE
                     val accessToken = res.data!!.get("access-token")
@@ -70,11 +72,11 @@ class LoginFragment : Fragment() {
                             uid
                         )
                     )
-                    mainViewModel.userHeaders.postValue(null)
+                    authViewModel.userHeaders.postValue(null)
                 }
-                is NetworkResult.Loading -> {
-                }
+                is NetworkResult.Loading -> { }
                 is NetworkResult.Error -> {
+                    Log.i("FragmentsDebug", "loginError")
                     binding.loadingProgressBar.visibility = View.INVISIBLE
                     binding.whiteLoadingEffect.visibility = View.INVISIBLE
 
@@ -91,7 +93,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun onSubmit(email: String, password: String) {
-        mainViewModel.signIn(email, password)
+        authViewModel.signIn(email, password)
     }
 
     override fun onDestroyView() {

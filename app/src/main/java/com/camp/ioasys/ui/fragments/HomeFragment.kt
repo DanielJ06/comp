@@ -14,7 +14,7 @@ import com.camp.ioasys.R
 import com.camp.ioasys.adapters.CompaniesAdapter
 import com.camp.ioasys.databinding.FragmentHomeBinding
 import com.camp.ioasys.util.NetworkResult
-import com.camp.ioasys.viewmodels.MainViewModel
+import com.camp.ioasys.viewmodels.CompaniesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var companiesViewModel: CompaniesViewModel
     private val mAdapter by lazy { CompaniesAdapter() }
 
     override fun onCreateView(
@@ -35,17 +35,19 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        companiesViewModel =
+            ViewModelProvider(requireActivity()).get(CompaniesViewModel::class.java)
         setupRecycler()
 
         requestCompanies(args.accessToken!!, args.client!!, args.uid!!, "")
         setupQueryListener()
 
-        mainViewModel.companies.observe(viewLifecycleOwner, Observer { res ->
+        companiesViewModel.clearStatus()
+        companiesViewModel.companies.observe(viewLifecycleOwner, Observer { res ->
             when (res) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
-                    Log.i("Empty", res.data.toString())
+                    Log.i("FragmentsDebug", "homeSuccess")
                     if (res.data?.companies?.isEmpty() == true) {
                         binding.emptyIcon.visibility = View.VISIBLE
                         binding.emptyText.visibility = View.VISIBLE
@@ -59,7 +61,7 @@ class HomeFragment : Fragment() {
                     showShimmer()
                 }
                 else -> {
-                    Log.i("Data", res.message.toString())
+                    Log.i("FragmentsDebug", "homeError")
                     hideShimmerEffect()
                 }
             }
@@ -105,7 +107,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun requestCompanies(accessToken: String, client: String, uid: String, query: String?) {
-        mainViewModel.loadCompanies(accessToken, client, uid, query)
+        companiesViewModel.loadCompanies(accessToken, client, uid, query)
     }
 
     private fun showShimmer() {
