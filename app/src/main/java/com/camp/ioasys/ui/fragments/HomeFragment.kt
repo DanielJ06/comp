@@ -61,7 +61,8 @@ class HomeFragment : Fragment() {
                     showShimmer()
                 }
                 else -> {
-                    Log.i("FragmentsDebug", "homeError")
+                    binding.emptyIcon.visibility = View.VISIBLE
+                    binding.emptyText.visibility = View.VISIBLE
                     hideShimmerEffect()
                 }
             }
