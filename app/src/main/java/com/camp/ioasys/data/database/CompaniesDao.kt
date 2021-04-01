@@ -1,4 +1,4 @@
-package com.camp.ioasys
+package com.camp.ioasys.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
