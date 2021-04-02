@@ -12,7 +12,7 @@ interface CompaniesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCompanies(companiesEntity: CompaniesEntity)
 
-    @Query("SELECT * FROM companies_table")
+    @Query("SELECT * FROM companies_table ORDER BY id ASC")
     fun readCompanies(): Flow<List<CompaniesEntity>>
 
 }

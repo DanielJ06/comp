@@ -8,14 +8,17 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.camp.ioasys.R
 import com.camp.ioasys.adapters.CompaniesAdapter
 import com.camp.ioasys.databinding.FragmentHomeBinding
 import com.camp.ioasys.util.NetworkResult
+import com.camp.ioasys.util.observeOnce
 import com.camp.ioasys.viewmodels.CompaniesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -28,26 +31,63 @@ class HomeFragment : Fragment() {
     private lateinit var companiesViewModel: CompaniesViewModel
     private val mAdapter by lazy { CompaniesAdapter() }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        companiesViewModel = ViewModelProvider(requireActivity()).get(CompaniesViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
 
-        companiesViewModel =
-            ViewModelProvider(requireActivity()).get(CompaniesViewModel::class.java)
         setupRecycler()
-
-        requestCompanies(args.accessToken!!, args.client!!, args.uid!!, "")
         setupQueryListener()
+        readDatabase()
 
-        companiesViewModel.clearStatus()
-        companiesViewModel.companies.observe(viewLifecycleOwner, Observer { res ->
+        return binding.root
+    }
+
+    private fun setupRecycler() {
+        binding.homeCompaniesRecycler.adapter = mAdapter
+        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        showShimmer()
+    }
+
+    private fun readDatabase() {
+        lifecycleScope.launch {
+            companiesViewModel.readCompanies.observeOnce(viewLifecycleOwner, { db ->
+                if (db.isNotEmpty()) {
+                    Log.d("HomeFragment", "readDatabase called")
+                    mAdapter.setData(db[0].company)
+                    hideShimmerEffect()
+                } else {
+                    requestCompanies(args.accessToken!!, args.client!!, args.uid!!, "")
+                }
+            })
+        }
+    }
+
+    private fun loadDataFromCache() {
+        lifecycleScope.launch {
+            companiesViewModel.readCompanies.observe(viewLifecycleOwner, { database ->
+                if (database.isNotEmpty()) {
+                    mAdapter.setData(database[0].company)
+                }
+            })
+        }
+    }
+
+    private fun requestCompanies(accessToken: String, client: String, uid: String, query: String?) {
+        Log.d("HomeFragment", "requestApi called")
+        companiesViewModel.loadCompanies(accessToken, client, uid, query)
+        companiesViewModel.companies.observe(viewLifecycleOwner, { res ->
             when (res) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
-                    Log.i("FragmentsDebug", "homeSuccess")
                     if (res.data?.companies?.isEmpty() == true) {
                         binding.emptyIcon.visibility = View.VISIBLE
                         binding.emptyText.visibility = View.VISIBLE
@@ -60,15 +100,14 @@ class HomeFragment : Fragment() {
                 is NetworkResult.Loading -> {
                     showShimmer()
                 }
-                else -> {
+                is NetworkResult.Error -> {
+                    loadDataFromCache()
                     binding.emptyIcon.visibility = View.VISIBLE
                     binding.emptyText.visibility = View.VISIBLE
                     hideShimmerEffect()
                 }
             }
         })
-
-        return binding.root
     }
 
     private fun setupQueryListener() {
@@ -99,16 +138,6 @@ class HomeFragment : Fragment() {
         val search = menu.findItem(R.id.menu_search)
         val searchView = search.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
-    }
-
-    private fun setupRecycler() {
-        binding.homeCompaniesRecycler.adapter = mAdapter
-        binding.homeCompaniesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        showShimmer()
-    }
-
-    private fun requestCompanies(accessToken: String, client: String, uid: String, query: String?) {
-        companiesViewModel.loadCompanies(accessToken, client, uid, query)
     }
 
     private fun showShimmer() {
