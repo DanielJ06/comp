@@ -33,7 +33,8 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        companiesViewModel = ViewModelProvider(requireActivity()).get(CompaniesViewModel::class.java)
+        companiesViewModel =
+            ViewModelProvider(requireActivity()).get(CompaniesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -65,7 +66,7 @@ class HomeFragment : Fragment() {
                     mAdapter.setData(db[0].company)
                     hideShimmerEffect()
                 } else {
-                    requestCompanies(args.accessToken!!, args.client!!, args.uid!!, "")
+                    requestCompanies(args.accessToken!!, args.client!!, args.uid!!)
                 }
             })
         }
@@ -81,9 +82,37 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun requestCompanies(accessToken: String, client: String, uid: String, query: String?) {
+    private fun requestCompanies(accessToken: String, client: String, uid: String) {
         Log.d("HomeFragment", "requestApi called")
-        companiesViewModel.loadCompanies(accessToken, client, uid, query)
+        companiesViewModel.loadCompanies(accessToken, client, uid)
+        companiesViewModel.companies.observe(viewLifecycleOwner, { res ->
+            when (res) {
+                is NetworkResult.Success -> {
+                    hideShimmerEffect()
+                    if (res.data?.companies?.isEmpty() == true) {
+                        binding.emptyIcon.visibility = View.VISIBLE
+                        binding.emptyText.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyIcon.visibility = View.INVISIBLE
+                        binding.emptyText.visibility = View.INVISIBLE
+                    }
+                    res.data?.let { mAdapter.setData(it) }
+                }
+                is NetworkResult.Loading -> {
+                    showShimmer()
+                }
+                is NetworkResult.Error -> {
+                    loadDataFromCache()
+                    binding.emptyIcon.visibility = View.VISIBLE
+                    binding.emptyText.visibility = View.VISIBLE
+                    hideShimmerEffect()
+                }
+            }
+        })
+    }
+
+    private fun searchCompanies(accessToken: String, client: String, uid: String, query: String?) {
+        companiesViewModel.searchCompanies(accessToken, client, uid, query)
         companiesViewModel.companies.observe(viewLifecycleOwner, { res ->
             when (res) {
                 is NetworkResult.Success -> {
@@ -114,7 +143,7 @@ class HomeFragment : Fragment() {
         binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()) {
-                    requestCompanies(args.accessToken!!, args.client!!, args.uid!!, query)
+                    searchCompanies(args.accessToken!!, args.client!!, args.uid!!, query)
                 } else {
                     Toast.makeText(
                         requireContext(),

@@ -23,7 +23,8 @@ class CompaniesViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     /** ROOM */
-    val readCompanies: LiveData<List<CompaniesEntity>> = repository.local.readDatabase().asLiveData()
+    val readCompanies: LiveData<List<CompaniesEntity>> =
+        repository.local.readDatabase().asLiveData()
 
     private fun insertCompanies(companiesEntity: CompaniesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,24 +34,42 @@ class CompaniesViewModel @Inject constructor(
     /** RETROFIT */
     val companies: MutableLiveData<NetworkResult<CompaniesResponse>> = MutableLiveData()
 
-    fun loadCompanies(accessToken: String, client: String, uid: String, query: String?) = viewModelScope.launch {
-        companies.value = NetworkResult.Loading()
-        if (hasInternetConnection()) {
-            try {
-                val response = repository.remote.getCompanies(accessToken, client, uid, query)
-                companies.value = handleCompanies(response)
+    fun loadCompanies(accessToken: String, client: String, uid: String) =
+        viewModelScope.launch {
+            companies.value = NetworkResult.Loading()
+            if (hasInternetConnection()) {
+                try {
+                    val response = repository.remote.getCompanies(accessToken, client, uid)
+                    companies.value = handleCompanies(response)
 
-                val companies = companies.value!!.data
-                if (companies != null) {
-                    offlineCatchCompanies(companies)
+                    val companies = companies.value!!.data
+                    if (companies != null) {
+                        offlineCatchCompanies(companies)
+                    }
+                } catch (e: Exception) {
+                    companies.value = NetworkResult.Error("Companies not found")
                 }
-            } catch (e: Exception) {
-                companies.value = NetworkResult.Error("Companies not found")
+            } else {
+                companies.value = NetworkResult.Error("No Internet Connection.")
             }
-        } else {
-            companies.value = NetworkResult.Error("No Internet Connection.")
         }
-    }
+
+    fun searchCompanies(accessToken: String, client: String, uid: String, query: String?) =
+        viewModelScope.launch {
+            companies.value = NetworkResult.Loading()
+            if (hasInternetConnection()) {
+                try {
+                    val response =
+                        repository.remote.searchCompanies(accessToken, client, uid, query)
+                    companies.value = handleCompanies(response)
+                    val companies = companies.value!!.data
+                } catch (e: Exception) {
+                    companies.value = NetworkResult.Error("Companies not found")
+                }
+            } else {
+                companies.value = NetworkResult.Error("No Internet Connection.")
+            }
+        }
 
     private fun offlineCatchCompanies(companies: CompaniesResponse) {
         val companiesEntity = CompaniesEntity(companies)
@@ -65,7 +84,8 @@ class CompaniesViewModel @Inject constructor(
             }
             response.code() == 401 -> {
                 NetworkResult.Error("You need to sign in before continuing.")
-            } else -> {
+            }
+            else -> {
                 NetworkResult.Error(response.message())
             }
         }
