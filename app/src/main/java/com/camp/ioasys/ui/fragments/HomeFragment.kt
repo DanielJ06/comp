@@ -47,7 +47,12 @@ class HomeFragment : Fragment() {
 
         setupRecycler()
         setupQueryListener()
-        readDatabase()
+
+        if (companiesViewModel.hasInternetConnection()) {
+            requestCompanies(args.accessToken!!, args.client!!, args.uid!!)
+        } else {
+            readDatabase()
+        }
 
         return binding.root
     }
@@ -92,9 +97,11 @@ class HomeFragment : Fragment() {
                     if (res.data?.companies?.isEmpty() == true) {
                         binding.emptyIcon.visibility = View.VISIBLE
                         binding.emptyText.visibility = View.VISIBLE
+                        binding.homeCompaniesRecycler.visibility = View.INVISIBLE
                     } else {
                         binding.emptyIcon.visibility = View.INVISIBLE
                         binding.emptyText.visibility = View.INVISIBLE
+                        binding.homeCompaniesRecycler.visibility = View.VISIBLE
                     }
                     res.data?.let { mAdapter.setData(it) }
                 }
@@ -103,8 +110,10 @@ class HomeFragment : Fragment() {
                 }
                 is NetworkResult.Error -> {
                     loadDataFromCache()
+                    binding.homeCompaniesRecycler.visibility = View.INVISIBLE
                     binding.emptyIcon.visibility = View.VISIBLE
                     binding.emptyText.visibility = View.VISIBLE
+                    binding.emptyText.text = res.message
                     hideShimmerEffect()
                 }
             }
@@ -120,9 +129,11 @@ class HomeFragment : Fragment() {
                     if (res.data?.companies?.isEmpty() == true) {
                         binding.emptyIcon.visibility = View.VISIBLE
                         binding.emptyText.visibility = View.VISIBLE
+                        binding.homeCompaniesRecycler.visibility = View.INVISIBLE
                     } else {
                         binding.emptyIcon.visibility = View.INVISIBLE
                         binding.emptyText.visibility = View.INVISIBLE
+                        binding.homeCompaniesRecycler.visibility = View.VISIBLE
                     }
                     res.data?.let { mAdapter.setData(it) }
                 }
@@ -132,7 +143,9 @@ class HomeFragment : Fragment() {
                 is NetworkResult.Error -> {
                     loadDataFromCache()
                     binding.emptyIcon.visibility = View.VISIBLE
+                    binding.homeCompaniesRecycler.visibility = View.INVISIBLE
                     binding.emptyText.visibility = View.VISIBLE
+                    binding.emptyText.text = res.message
                     hideShimmerEffect()
                 }
             }
@@ -176,10 +189,4 @@ class HomeFragment : Fragment() {
     private fun hideShimmerEffect() {
         binding.homeCompaniesRecycler.hideShimmer()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

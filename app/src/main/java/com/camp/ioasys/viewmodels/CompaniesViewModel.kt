@@ -37,20 +37,16 @@ class CompaniesViewModel @Inject constructor(
     fun loadCompanies(accessToken: String, client: String, uid: String) =
         viewModelScope.launch {
             companies.value = NetworkResult.Loading()
-            if (hasInternetConnection()) {
-                try {
-                    val response = repository.remote.getCompanies(accessToken, client, uid)
-                    companies.value = handleCompanies(response)
+            try {
+                val response = repository.remote.getCompanies(accessToken, client, uid)
+                companies.value = handleCompanies(response)
 
-                    val companies = companies.value!!.data
-                    if (companies != null) {
-                        offlineCatchCompanies(companies)
-                    }
-                } catch (e: Exception) {
-                    companies.value = NetworkResult.Error("Companies not found")
+                val companies = companies.value!!.data
+                if (companies != null) {
+                    offlineCatchCompanies(companies)
                 }
-            } else {
-                companies.value = NetworkResult.Error("No Internet Connection.")
+            } catch (e: Exception) {
+                companies.value = NetworkResult.Error("Companies not found")
             }
         }
 
@@ -91,7 +87,7 @@ class CompaniesViewModel @Inject constructor(
         }
     }
 
-    private fun hasInternetConnection(): Boolean {
+    fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
