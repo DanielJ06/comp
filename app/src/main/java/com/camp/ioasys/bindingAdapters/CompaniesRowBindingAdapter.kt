@@ -11,7 +11,7 @@ import com.camp.ioasys.models.Company
 import com.camp.ioasys.ui.fragments.HomeFragmentDirections
 
 
-class CompaniesBindingAdapter {
+class CompaniesRowBindingAdapter {
 
     companion object {
 

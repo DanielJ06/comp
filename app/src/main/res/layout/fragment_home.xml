@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="companiesViewModel"
+            type="com.camp.ioasys.viewmodels.CompaniesViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

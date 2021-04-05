@@ -1,6 +1,9 @@
 package com.camp.ioasys.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.camp.ioasys.data.Repository
 import com.camp.ioasys.data.database.CompaniesEntity
@@ -31,15 +34,22 @@ class CompaniesViewModel @Inject constructor(
     val companies: MutableLiveData<NetworkResult<CompaniesResponse>> = MutableLiveData()
 
     fun loadCompanies(accessToken: String, client: String, uid: String, query: String?) = viewModelScope.launch {
-        try {
-            val response = repository.remote.getCompanies(accessToken, client, uid, query)
-            companies.value = handleCompanies(response)
+        companies.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.getCompanies(accessToken, client, uid, query)
+                companies.value = handleCompanies(response)
 
-            val companies = companies.value!!.data
-            if (companies != null) {
-                offlineCatchCompanies(companies)
+                val companies = companies.value!!.data
+                if (companies != null) {
+                    offlineCatchCompanies(companies)
+                }
+            } catch (e: Exception) {
+                companies.value = NetworkResult.Error("Companies not found")
             }
-        } catch (e: Exception) {}
+        } else {
+            companies.value = NetworkResult.Error("No Internet Connection.")
+        }
     }
 
     private fun offlineCatchCompanies(companies: CompaniesResponse) {
@@ -48,7 +58,6 @@ class CompaniesViewModel @Inject constructor(
     }
 
     private fun handleCompanies(response: Response<CompaniesResponse>): NetworkResult<CompaniesResponse> {
-        companies.value = NetworkResult.Loading()
         return when {
             response.isSuccessful -> {
                 val data = response.body()
@@ -62,8 +71,18 @@ class CompaniesViewModel @Inject constructor(
         }
     }
 
-    fun clearStatus() {
-        companies.value = null
+    private fun hasInternetConnection(): Boolean {
+        val connectivityManager = getApplication<Application>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+        return when {
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
     }
 
 }
