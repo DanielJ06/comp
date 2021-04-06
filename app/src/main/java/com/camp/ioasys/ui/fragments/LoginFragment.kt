@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.camp.ioasys.databinding.FragmentLoginBinding
 import com.camp.ioasys.util.NetworkResult
@@ -24,6 +25,10 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var authViewModel: AuthViewModel
+
+    private var aT: String? = null
+    private var c: String? = null
+    private var u: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +55,17 @@ class LoginFragment : Fragment() {
             }
         }
 
-        authViewModel.userHeaders.observe(viewLifecycleOwner, Observer { res ->
+        authViewModel.readUserInfo.asLiveData().observe(viewLifecycleOwner, { value ->
+            findNavController().navigate(
+                LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                    value.accessToken,
+                    value.client,
+                    value.uid
+                )
+            )
+        })
+
+        authViewModel.userHeaders.observe(viewLifecycleOwner, { res ->
             when (res) {
                 is NetworkResult.Success -> {
                     Log.i("FragmentsDebug", "loginSuccess")
