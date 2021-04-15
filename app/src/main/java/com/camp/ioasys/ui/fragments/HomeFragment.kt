@@ -48,6 +48,16 @@ class HomeFragment : Fragment() {
         setupRecycler()
         setupQueryListener()
 
+        binding.homeSearchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                Log.i("debug", "has")
+                binding.homeLogoImage.visibility = View.INVISIBLE
+            } else {
+                Log.i("debug", "no")
+                binding.homeLogoImage.visibility = View.VISIBLE
+            }
+        }
+
         if (companiesViewModel.hasInternetConnection()) {
             requestCompanies(args.accessToken!!, args.client!!, args.uid!!)
         } else {
