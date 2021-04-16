@@ -50,10 +50,8 @@ class HomeFragment : Fragment() {
 
         binding.homeSearchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                Log.i("debug", "has")
                 binding.homeLogoImage.visibility = View.INVISIBLE
             } else {
-                Log.i("debug", "no")
                 binding.homeLogoImage.visibility = View.VISIBLE
             }
         }
