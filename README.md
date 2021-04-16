@@ -1,4 +1,4 @@
-#Project logo here
+<img src=".github/assets/logo_ioasys.png" width="200"/>
 
 # Ioasys Empresas (CAMP 2021 - Fase 1)
  Essa é uma aplicação android feita com kotlin durante a fase 1 do CAMP 2021 da [Ioasys](https://www.ioasys.com.br/). 
