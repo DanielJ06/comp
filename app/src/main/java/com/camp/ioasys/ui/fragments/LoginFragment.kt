@@ -55,16 +55,6 @@ class LoginFragment : Fragment() {
             }
         }
 
-        authViewModel.readUserInfo.asLiveData().observe(viewLifecycleOwner, { value ->
-            findNavController().navigate(
-                LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                    value.accessToken,
-                    value.client,
-                    value.uid
-                )
-            )
-        })
-
         authViewModel.userHeaders.observe(viewLifecycleOwner, { res ->
             when (res) {
                 is NetworkResult.Success -> {
