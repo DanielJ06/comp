@@ -11,10 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/beige"
-        android:id="@+id/home_constraint_layout"
         tools:context=".ui.fragments.HomeFragment">
 
         <androidx.appcompat.widget.Toolbar
@@ -80,9 +80,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/empty_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp"
             android:text="@string/no_data"
+            android:textAlignment="center"
             android:textColor="@color/warm_grey"
             android:textSize="18sp"
             android:textStyle="bold"
