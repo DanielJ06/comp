@@ -6,7 +6,7 @@
  
 
 [![Author](https://img.shields.io/badge/author-DanielJ06-7FCD91?style=flat-square)](https://github.com/danielj06)
-[![Languages](https://img.shields.io/github/languages/count/DanielJ06/comp?color=%7FCD91&style=flat-square)](#)
+[![Languages](https://img.shields.io/github/languages/count/DanielJ06/ioasys-empresas?color=%7FCD91&style=flat-square)](#)
 
 <hr />
 
