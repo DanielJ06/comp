@@ -36,7 +36,7 @@ class CompaniesRowBindingAdapter {
         fun onLoadImage(
             image: ImageView, imageUrl: String
         ) {
-            image.load("https://thispersondoesnotexist.com/image") {
+            image.load("https://empresas.ioasys.com.br/$imageUrl") {
                 crossfade(200)
                 error(R.color.darker_pink)
             }

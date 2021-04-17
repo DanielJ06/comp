@@ -31,7 +31,7 @@ class DetailsFragment : Fragment() {
         binding.detailCompanyTitle.text = args.companyName
         binding.detailCompanyDesc.text = args.companyDesc
         binding.detailCompanyCity.text = args.companyCity
-        binding.detailCompanyImage.load("https://thispersondoesnotexist.com/image") {
+        binding.detailCompanyImage.load("https://empresas.ioasys.com.br/${args.companyImageUrl}") {
             crossfade(200)
             error(R.color.darker_pink)
         }
