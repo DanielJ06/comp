@@ -38,6 +38,10 @@ class AuthViewModel @Inject constructor(
         } catch (e: Exception) {}
     }
 
+    fun logout() = viewModelScope.launch {
+        dataStoreRepository.logout()
+    }
+
     private fun handleLogin(response: Response<Any>): NetworkResult<Headers> {
         userHeaders.value = NetworkResult.Loading()
         return when {

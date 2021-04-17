@@ -39,6 +39,14 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         }
     }
 
+    suspend fun logout() {
+        dataStore.edit {
+            it.remove(PreferencesKeys.uid)
+            it.remove(PreferencesKeys.client)
+            it.remove(PreferencesKeys.accessToken)
+        }
+    }
+
     val readUserInfo: Flow<User> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
